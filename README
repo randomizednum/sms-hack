@@ -1,0 +1,26 @@
+sms-hack is a hacky utility that queries ModemManager's messaging interface (or the modem directly) to retrieve SMS. It may be relevant to you if you are using mobile Linux and are having trouble receiving SMS (but read the caveats below).
+
+Dependencies are:
+
+* autocli (https://github.com/randomizednum/lua-autocli)
+* pdu (https://github.com/randomizednum/lua-pdu)
+* lfs (Alpine/postmarketOS package lua-filesystem)
+* md5 (Alpine/postmarketOS package lua-md5)
+* lgi (Alpine/postmarketOS package lua-lgi)
+* dbus_proxy (Alpine/postmarketOS package lua-dbus_proxy)
+
+To install, run as root:
+
+	make install
+
+Then you can run sms-hack as follows:
+
+	sms-hack
+
+It displays the messages it retrieved and saves them to ~/sms-dir (overridable).
+
+Normally, ModemManager is supposed to be able to handle this all; in case it doesn't, that's a bug. But in my case, it's a bug that has caused me to miss several critical SMS, so I had to find a workaround. The workaround worked, but unsurprisingly, it was difficult to do manually. As a natural consequence, I made sms-hack :)
+
+I'm not an expert in how modems work, and it's not unlikely that the things I'm doing here are plain wrong. Be warned. The primary purpose of this utility is to make the act of "SMS maintenance" I previously used to do take a few seconds instead of several minutes. If you also have problems receiving SMS, I hope sms-hack can help, but I can't give guarantees. That said, you should be fine as long as you don't lead to the issuing of any commands to the modem you don't understand. (sms-hack asks for your permission for any command it will issue to the modem.)
+
+In order to do most of what it is useful for, sms-hack needs to be able to call Command() on the relevant Modem exposed by ModemManager. Quoting the ModemManager documentation: "[Using Command()] is only allowed when running ModemManager in debug mode or if the project was built using the with-at-command-via-dbus configure option."
